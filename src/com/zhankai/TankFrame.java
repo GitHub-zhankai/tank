@@ -16,11 +16,14 @@ import java.awt.event.WindowEvent;
  */
 public class TankFrame extends Frame {
 
-    Tank mainTank = new Tank(200, 300, DirectionEnum.DOWN);
+    //游戏界面
+    private static final int GAME_WIDTH = 700, GAME_HIGHT = 900;
+
+    Tank mainTank = new Tank(200, 300, DirectionEnum.DOWN, this);
     Bullet bullet = new Bullet(200, 300, DirectionEnum.DOWN);
 
     public TankFrame(){
-        setSize(800,600);
+        setSize(GAME_WIDTH,GAME_HIGHT);
         //是否窗口可调节
         setResizable(false);
         //设置标题名称
@@ -39,6 +42,22 @@ public class TankFrame extends Frame {
 
         //添加键盘监听事件
         this.addKeyListener(new MyKeyListener());
+    }
+
+    //为了解决双缓冲
+    Image image = null;
+    @Override
+    public void update(Graphics g) {
+        if(image == null){
+            image = this.createImage(GAME_WIDTH,GAME_HIGHT);
+        }
+        Graphics goffScreen = image.getGraphics();
+        Color color = goffScreen.getColor();
+        goffScreen.setColor(Color.WHITE);
+        goffScreen.fillRect(0,0,GAME_WIDTH,GAME_HIGHT);
+        goffScreen.setColor(color);
+        paint(goffScreen);
+        g.drawImage(image,0,0,null);
     }
 
     @Override
@@ -85,6 +104,8 @@ public class TankFrame extends Frame {
                 case KeyEvent.VK_UP:    up = false;    //上
                     break;
                 case KeyEvent.VK_DOWN:  down = false;   //下
+                    break;
+                case KeyEvent.VK_CONTROL:  mainTank.fire();
                     break;
                 default: break;
             }

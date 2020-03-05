@@ -19,14 +19,16 @@ public class Tank {
 
     private DirectionEnum dir = DirectionEnum.DOWN;
     private static final int SPEED = 10;
+    private TankFrame tankFrame;
 
     private boolean move = false;
 
-    public Tank(int x, int y, DirectionEnum dir) {
+    public Tank(int x, int y, DirectionEnum dir, TankFrame tankFrame) {
         super();
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.tankFrame = tankFrame;
     }
 
     public void paint(Graphics g) {
@@ -79,5 +81,10 @@ public class Tank {
 
     public void setMove(boolean move) {
         this.move = move;
+    }
+
+    //发射子弹
+    public void fire() {
+        tankFrame.bullet = new Bullet(this.x, this.y, this.dir);
     }
 }
